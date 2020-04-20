@@ -34,7 +34,7 @@ public class CRUDProdutosResources {
 		if(produtos.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Não existem produtos registrados");
 		}else {
-			return ResponseEntity.ok(produtoRepository.findAll());
+			return ResponseEntity.ok(produtos);
 		}
 	}
 	
@@ -58,7 +58,19 @@ public class CRUDProdutosResources {
 	public ResponseEntity<Produto> alterarProduto(@PathVariable Integer id, @Valid @RequestBody Produto produto) {
 		Optional<Produto> produtoExistente = produtoRepository.findById(id);
 		if(produtoExistente.isPresent()) {
-			return ResponseEntity.ok(produtoExistente.get());
+			if(produto.getDescricao() != null) {
+				produtoExistente.get().setDescricao(produto.getDescricao());
+			}
+			if(produto.getPreco() > 0) {
+				produtoExistente.get().setPreco(produto.getPreco());
+			}
+			if(produto.getSaldo() > 0) {
+				produtoExistente.get().setSaldo(produto.getSaldo());
+			}
+			if(produto.getUnidade() != null) {
+				produtoExistente.get().setUnidade(produto.getUnidade());
+			}
+			return ResponseEntity.ok(produtoRepository.save(produtoExistente.get()));
 		} else {
 			throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Produto não encontrado");
 		}
@@ -68,6 +80,7 @@ public class CRUDProdutosResources {
 	public ResponseEntity<String> apagarProduto(@PathVariable Integer id) {
 		Optional<Produto> produtoExistente = produtoRepository.findById(id);
 		if(produtoExistente.isPresent()) {
+			produtoRepository.deleteById(produtoExistente.get().getCodigo());
 			return ResponseEntity.status(HttpStatus.OK).body("O produto "+ produtoExistente.get().getDescricao() +" foi apagado");
 		} else {
 			throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Produto não encontrado");
