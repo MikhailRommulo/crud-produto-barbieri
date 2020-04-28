@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -20,10 +21,10 @@ public class Produto {
 	@NotEmpty
 	private String unidade;
 	
-	@NotEmpty
+	@NotNull
 	private double preco;
 	
-	@NotEmpty
+	@NotNull
 	private double saldo;
 
 	public Integer getCodigo() {

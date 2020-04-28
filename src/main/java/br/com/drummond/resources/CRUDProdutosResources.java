@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import br.com.drummond.repository.ProdutoRepository;
 
 @RestController
 @RequestMapping("/produtos")
+@CrossOrigin
 public class CRUDProdutosResources {
 	
 	@Autowired
@@ -55,7 +57,7 @@ public class CRUDProdutosResources {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Produto> alterarProduto(@PathVariable Integer id, @Valid @RequestBody Produto produto) {
+	public ResponseEntity<Produto> alterarProduto(@PathVariable Integer id, @Valid @RequestBody Produto produto) throws IllegalArgumentException, IllegalAccessException {
 		Optional<Produto> produtoExistente = produtoRepository.findById(id);
 		if(produtoExistente.isPresent()) {
 			if(produto.getDescricao() != null) {
